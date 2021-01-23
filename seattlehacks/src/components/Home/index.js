@@ -1,4 +1,8 @@
 import React from 'react';
+ 
+import { withAuthorization } from '../Session';
+
+
 const OT = require('@opentok/client');
 
 var apiKey = '45828062';
@@ -54,7 +58,7 @@ export const initializaSession = () => {
  });
 }
 
-const Home = () => {
+const HomePage = () => {
   return(
     <div>
       <button onClick = {initializaSession}>Join call!</button>
@@ -68,6 +72,6 @@ const Home = () => {
   )
 };
 
-
+const condition = authUser => !!authUser;
  
-export default Home;
+export default withAuthorization(condition)(HomePage);
