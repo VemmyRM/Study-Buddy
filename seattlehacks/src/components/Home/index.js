@@ -1,8 +1,6 @@
 import React from 'react';
  
 import { withAuthorization } from '../Session';
-
-
 const OT = require('@opentok/client');
 
 var apiKey = '45828062';
@@ -17,7 +15,7 @@ function handleError(error) {
   }
 }
 
-export const initializaSession = () => {
+export const initializeSession = () => {
  session = OT.initSession(apiKey, sessionId);
  // create a publisher
  publisher = OT.initPublisher(
@@ -33,7 +31,7 @@ export const initializaSession = () => {
  session.on("streamCreated", function (event) {
      subscriber = session.subscribe(
          event.stream,
-         "Subscriber",
+         "subscriber",
          {
             insertMode: "append",
             width: "100%",
@@ -54,21 +52,27 @@ export const initializaSession = () => {
  });
  // do some action upon destroying the created stream
  session.on("streamDestroyed", function (event) {
-     console.log("The Video chat has ended");
+   console.log(event);
+     session.unpublish(publisher);
  });
+
+}
+
+const endCall = () => {
+  session.unpublish(publisher);
+
 }
 
 const HomePage = () => {
   return(
-    <div>
-      <button onClick = {initializaSession}>Join call!</button>
-      <button onClick = {() => {session.unpublish(publisher)}}>End call!</button>
+    <div id = "homepage">
+      <button className = "" onClick = {() => initializeSession()}>Join call!</button>
+      <button onClick = {() => endCall()}>End call!</button>
       <div id = "videos">
-        <div od="publisher"></div>
-        <div id="subscribe"></div>
+        <div id="publisher"></div>
+        <div id="subscriber"></div>
     </div>
     </div>
-    
   )
 };
 
