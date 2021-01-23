@@ -59,7 +59,7 @@ export const initializeSession = () => {
 }
 
 const endCall = () => {
-  session.unpublish(publisher);
+  session.disconnect();
 
 }
 
