@@ -46,7 +46,6 @@ const joinCall = () => {
   // .catch(handleError);
 }
 
-
 export const initializeSession = () => {
 
     session = OT.initSession(apiKey, sessionId);
