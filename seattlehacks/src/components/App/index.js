@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
+import CallPage from '../Call';
 import Navigation from '../Navigation';
 import LandingPage from '../Landing';
 import SignUpPage from '../SignUp';
@@ -29,6 +30,7 @@ const App = () => (
         component={PasswordForgetPage}
       />
       <Route exact path={ROUTES.HOME} component={HomePage} />
+      <Route exact path={ROUTES.CALL} component={CallPage} />
       <Route exact path={ROUTES.ACCOUNT} component={AccountPage} />
       <Route exact path={ROUTES.ADMIN} component={AdminPage} />
     </div>

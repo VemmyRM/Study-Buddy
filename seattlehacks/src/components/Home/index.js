@@ -1,6 +1,11 @@
 import React from 'react';
- 
+import './index.css';
+import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownButton from 'react-bootstrap/DropdownButton'
 import { withAuthorization } from '../Session';
+import axios from 'axios';
+
+
 const OT = require('@opentok/client');
 
 var apiKey = '45828062';
@@ -15,31 +20,47 @@ function handleError(error) {
   }
 }
 
+const joinCall = () => {
+  var SERVER_BASE_URL = 'https://studybuddytech.herokuapp.com';
+
+
+  fetch(SERVER_BASE_URL + '/session').then(function(res) {
+    return res.json()
+  }).then(function(res) {
+    apiKey = res.apiKey;
+    sessionId = res.sessionId;
+    token = res.token;
+    initializeSession();
+  }).catch(handleError);
+
+
+  // fetch(SERVER_BASE_URL + '/session').then(function(res) {
+  //   return res.json()
+  // }) 
+  // .then(function(res) {
+  //   apiKey = res.apiKey;
+  //   sessionId = res.sessionId;
+  //   token = res.token;
+  //   initializeSession();
+  // })
+  // .catch(handleError);
+}
+
 export const initializeSession = () => {
- session = OT.initSession(apiKey, sessionId);
- // create a publisher
- publisher = OT.initPublisher(
-    "publisher",
-    {
-       insertMode: "append",  
-       width: "100%",
-       height: "100%"
-    },
-    handleError
- );
- // subscribe to newly created stream
- session.on("streamCreated", function (event) {
-     subscriber = session.subscribe(
-         event.stream,
-         "subscriber",
-         {
-            insertMode: "append",
-            width: "100%",
-            height: "100%",
-         },
-         handleError
+
+    session = OT.initSession(apiKey, sessionId);
+    // create a publisher
+    publisher = OT.initPublisher(
+       "publisher",
+       {
+          insertMode: "append",  
+          width: "100%",
+          height: "100%"
+       },
+       handleError
     );
- });
+    // subscribe to newly created stream
+
 
  // connect to the session
  session.connect(token, function (error) {
@@ -50,24 +71,57 @@ export const initializeSession = () => {
        session.publish(publisher, handleError);
    }
  });
+
+ session.on("streamCreated", function (event) {
+    session.subscribe(
+      event.stream,
+      "subscriber",
+      {
+         insertMode: "append",
+         width: "100%",
+         height: "100%",
+      },
+      handleError
+ );
+});
+
+console.log(session);
+
  // do some action upon destroying the created stream
  session.on("streamDestroyed", function (event) {
-   console.log(event);
-     session.unpublish(publisher);
+   console.log("Stream Destroyed!");
+   console.log(session);
  });
+
+ session.on("sessionDisconnected", (event) =>{
+    console.log("You have been disconnected!");
+    if (event.reason === "networkDisconnected"){
+      alert("Your network was disconnected");
+    }
+ })
 
 }
 
 const endCall = () => {
-  session.unpublish(publisher);
-
+  session.disconnect();
 }
 
 const HomePage = () => {
   return(
     <div id = "homepage">
-      <button className = "" onClick = {() => initializeSession()}>Join call!</button>
+     <div>I am studying <DropdownButton id="dropdown-basic-button" title="Course">
+  <Dropdown.Item >Math</Dropdown.Item>
+  <Dropdown.Item >Physics</Dropdown.Item>
+  <Dropdown.Item>Chemistry</Dropdown.Item>
+  <Dropdown.Item>English</Dropdown.Item>
+  <Dropdown.Item>CS</Dropdown.Item>
+</DropdownButton></div>
+<br />
+<br />
+
+      <button className = "" onClick = {() => joinCall()}>Join call!</button>
       <button onClick = {() => endCall()}>End call!</button>
+     
       <div id = "videos">
         <div id="publisher"></div>
         <div id="subscriber"></div>
