@@ -1,147 +1,135 @@
+import React from 'react';
 import './index.css';
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
-import { withAuthorization, AuthUserContext } from '../Session';
-import React, { Component } from 'react';
-import { compose } from 'recompose';
-import { withFirebase } from '../Firebase';
-import * as ROUTES from '../../constants/routes';
-import {  withRouter } from 'react-router-dom';
-
-const INITIAL_STATE = {
-  username: '',
-  course: '',
-  error: null,
-};
-
-const HomePage = () => (
-  <div>
-      <h1>Home</h1>
-    <HomePageForm />
-
-    <AuthUserContext.Consumer>
-        {authUser => (
-          <div>
-            <h1>UID: {authUser.uid}</h1>
-          </div>
-        )}
-         </AuthUserContext.Consumer>
-  
-  </div>
-);
-
-// const HomePage = () => {
-//   return(
-//     <div id = "homepage">
-//      <div>I am studying <DropdownButton id="dropdown-basic-button" title="Course">
-//   <Dropdown.Item >Math</Dropdown.Item>
-//   <Dropdown.Item >Physics</Dropdown.Item>
-//   <Dropdown.Item>Chemistry</Dropdown.Item>
-//   <Dropdown.Item>English</Dropdown.Item>
-//   <Dropdown.Item>CS</Dropdown.Item>
-// </DropdownButton></div>
+import { withAuthorization } from '../Session';
+import axios from 'axios';
 
 
-// <br />
-// <br />
-// {/* <CallPage /> */}
-//     </div>
-//   )
-// };
+const OT = require('@opentok/client');
 
-class HomePageFormBase extends Component{
-  constructor(props) {
-    super(props);
-    this.state = { ...INITIAL_STATE };
+var apiKey = '45828062';
+var sessionId = '1_MX40NTgyODA2Mn5-MTYxMTQyNjY4NDAyMH5BbjVtTHVVbjVJSGQ5MWN1ZGJ3YU5DL2l-UH4';
+var token = 'T1==cGFydG5lcl9pZD00NTgyODA2MiZzaWc9ZTNiOTgzNzkzM2EzYWVmMTQxNmQyZjRjMDFjNDg4OGM1M2I2MGNhMTpzZXNzaW9uX2lkPTFfTVg0ME5UZ3lPREEyTW41LU1UWXhNVFF5TmpZNE5EQXlNSDVCYmpWdFRIVlZialZKU0dRNU1XTjFaR0ozWVU1REwybC1VSDQmY3JlYXRlX3RpbWU9MTYxMTQyNzQyMiZub25jZT0wLjY1MTY2MDkxMTYwMzAyODcmcm9sZT1wdWJsaXNoZXImZXhwaXJlX3RpbWU9MTYxMTUxMzgyMg==';
+
+let session, publisher, subscriber;
+
+function handleError(error) {
+  if (error) {
+    alert(error.message);
   }
- 
-  onSubmit = event => {
-    const { username, course } = this.state;
+}
 
-    this.props.firebase.
-    createQueue (username, course)
-    .then(authUser =>
-      {
-        return 
-        this.props.firebase
-    //     .database().ref('Matches/' + authUser.user.uid)
-    //     .user(authUser.user.uid)
-    //     .set({
-    //   username,
-    //  course,
-    // })
-    .user(authUser.user.uid)
-          .set({
-            username,
-            course,
-          });
-        // );
-    // )}
-    // </AuthUserContext.Consumer>
+
+const joinCall = () => {
+  var SERVER_BASE_URL = 'https://studybuddytech.herokuapp.com';
+  axios.get(SERVER_BASE_URL + '/session').then(function(res) {
+    return res.json()
   })
+  .then(function(res) {
+    apiKey = res.apiKey;
+    sessionId = res.sessionId;
+    token = res.token;
+    initializeSession();
+  })
+  .catch(handleError)
 
-    // this.props.firebase
-    //   .doCreateUserWithEmailAndPassword(username, course )
-    //   .then(authUser => {
-    //     // Create a user in your Firebase realtime database
-        // return this.props.firebase
-        //   .user(authUser.user.uid)
-        //   .set({
-        //     username,
-        //     course,
-        //   });
-      // })
-      .then(() => {
-        this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.CALL);
-      })
-      .catch(error => {
-        this.setState({ error });
-      });
- 
-    event.preventDefault();
-  };
- 
-  onChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
- 
-  render() {
-    const {
-      username,
-      course,
-      error,
-    } = this.state;
+  // fetch(SERVER_BASE_URL + '/session').then(function(res) {
+  //   return res.json()
+  // }) 
+  // .then(function(res) {
+  //   apiKey = res.apiKey;
+  //   sessionId = res.sessionId;
+  //   token = res.token;
+  //   initializeSession();
+  // })
+  // .catch(handleError);
+}
 
-    return (
-  
-  <form onSubmit={this.onSubmit}>
-           <div>I am studying <DropdownButton id="dropdown-basic-button" title="Course">
+
+export const initializeSession = () => {
+
+    session = OT.initSession(apiKey, sessionId);
+    // create a publisher
+    publisher = OT.initPublisher(
+       "publisher",
+       {
+          insertMode: "append",  
+          width: "100%",
+          height: "100%"
+       },
+       handleError
+    );
+    // subscribe to newly created stream
+
+
+ // connect to the session
+ session.connect(token, function (error) {
+   // If the connection is successful, publish to the session
+   if (error) {
+       handleError(error);
+   } else {
+       session.publish(publisher, handleError);
+   }
+ });
+
+ session.on("streamCreated", function (event) {
+    session.subscribe(
+      event.stream,
+      "subscriber",
+      {
+         insertMode: "append",
+         width: "100%",
+         height: "100%",
+      },
+      handleError
+ );
+});
+
+ // do some action upon destroying the created stream
+ session.on("streamDestroyed", function (event) {
+   console.log("Stream Destroyed!");
+   console.log(session);
+ });
+
+ session.on("sessionDisconnected", (event) =>{
+    console.log("You have been disconnected!");
+    if (event.reason === "networkDisconnected"){
+      alert("Your network was disconnected");
+    }
+ })
+
+ console.log(session);
+
+}
+
+const endCall = () => {
+  session.disconnect();
+}
+
+const HomePage = () => {
+  return(
+    <div id = "homepage">
+     <div>I am studying <DropdownButton id="dropdown-basic-button" title="Course">
   <Dropdown.Item >Math</Dropdown.Item>
   <Dropdown.Item >Physics</Dropdown.Item>
   <Dropdown.Item>Chemistry</Dropdown.Item>
   <Dropdown.Item>English</Dropdown.Item>
   <Dropdown.Item>CS</Dropdown.Item>
 </DropdownButton></div>
-        <input
-          name="course"
-          value={course}
-          onChange={this.onChange}
-          type="text"
-          placeholder="Preferred Course"
-        />
-        <button type="submit">Submit request!</button>
-        {error && <p>{error.message}</p>}
-      </form>
-     
-    );
-  }
-}
+<br />
+<br />
 
-const HomePageForm = compose(
-  withRouter,
-  withFirebase,
-)(HomePageFormBase);
+      <button className = "" onClick = {() => joinCall()}>Join call!</button>
+      <button onClick = {() => endCall()}>End call!</button>
+     
+      <div id = "videos">
+        <div id="publisher"></div>
+        <div id="subscriber"></div>
+    </div>
+    </div>
+  )
+};
 
 const condition = authUser => !!authUser;
  
