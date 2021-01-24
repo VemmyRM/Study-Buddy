@@ -20,9 +20,9 @@ function handleError(error) {
   }
 }
 
+
 const joinCall = () => {
   var SERVER_BASE_URL = 'https://studybuddytech.herokuapp.com';
-
   axios.get(SERVER_BASE_URL + '/session').then(function(res) {
     return res.json()
   })
@@ -98,6 +98,8 @@ export const initializeSession = () => {
       alert("Your network was disconnected");
     }
  })
+
+ console.log(session);
 
 }
 
