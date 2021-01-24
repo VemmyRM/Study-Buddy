@@ -1,18 +1,20 @@
 import React from 'react';
-import {Jumbotron, Button} from "react-bootstrap";
+import {Jumbotron, Button, Container} from "react-bootstrap";
+import * as ROUTES from '../../constants/routes';
+
+//import "./index.css";
  
 const Landing = () => (
-<Jumbotron id= "landingTron">
-  <h1>Our Project</h1>
-  <br></br>
-  <p>
-    A collaborative online learning experience to bring together students from all around the world.
-  </p>
-  <br></br>
-  <p>
-    <Button variant="primary">Learn more</Button>
-  </p>
-</Jumbotron>
+  <Container id= "landingTron">
+    <h1 className = "text">Study Buddy</h1>
+    <br></br>
+    <p className = "words">
+      A collaborative online studying experience.  
+    </p>
+    <br></br>
+    <br></br>
+    <Button variant = "outline-light" href = {ROUTES.SIGN_IN}>Sign In</Button>
+  </Container>
 );
  
 export default Landing;

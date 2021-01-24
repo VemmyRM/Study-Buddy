@@ -19,9 +19,28 @@ body,
   height: 100%;
 }
 
+.link {
+  color: rgb(209, 209, 209);
+}
+
+.words {
+  color: rgb(209, 209, 209);
+  font-size: 25px;
+}
+
+.text {
+  font: larger;
+  font-size: 80px;
+  color: aliceblue;
+}
+
 #landingTron {
-  background-color: rgba(192, 192, 210, 0.3);
+  background-color: rgba(247, 247, 247, 0);
   height: 500px;
+  margin: auto;
+  text-align: center;
+  color: black;
+  vertical-align: middle;
 }
 
 #videos {
