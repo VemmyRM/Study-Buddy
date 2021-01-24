@@ -10,7 +10,7 @@ import { Form, Container, Button} from 'react-bootstrap';
 
  
 const SignInPage = () => (
-  <Container>
+  <Container className = "form">
     <h1>Sign In</h1>
     <br></br>
     <SignInForm />
