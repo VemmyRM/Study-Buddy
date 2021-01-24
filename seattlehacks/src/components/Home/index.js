@@ -1,102 +1,147 @@
-import React from 'react';
 import './index.css';
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
-import { withAuthorization } from '../Session';
-const OT = require('@opentok/client');
+import { withAuthorization, AuthUserContext } from '../Session';
+import React, { Component } from 'react';
+import { compose } from 'recompose';
+import { withFirebase } from '../Firebase';
+import * as ROUTES from '../../constants/routes';
+import {  withRouter } from 'react-router-dom';
 
-var apiKey = '45828062';
-var sessionId = '1_MX40NTgyODA2Mn5-MTYxMTQyNjY4NDAyMH5BbjVtTHVVbjVJSGQ5MWN1ZGJ3YU5DL2l-UH4';
-var token = 'T1==cGFydG5lcl9pZD00NTgyODA2MiZzaWc9ZTNiOTgzNzkzM2EzYWVmMTQxNmQyZjRjMDFjNDg4OGM1M2I2MGNhMTpzZXNzaW9uX2lkPTFfTVg0ME5UZ3lPREEyTW41LU1UWXhNVFF5TmpZNE5EQXlNSDVCYmpWdFRIVlZialZKU0dRNU1XTjFaR0ozWVU1REwybC1VSDQmY3JlYXRlX3RpbWU9MTYxMTQyNzQyMiZub25jZT0wLjY1MTY2MDkxMTYwMzAyODcmcm9sZT1wdWJsaXNoZXImZXhwaXJlX3RpbWU9MTYxMTUxMzgyMg==';
+const INITIAL_STATE = {
+  username: '',
+  course: '',
+  error: null,
+};
 
-let session, publisher, subscriber;
+const HomePage = () => (
+  <div>
+      <h1>Home</h1>
+    <HomePageForm />
 
-function handleError(error) {
-  if (error) {
-    alert(error.message);
+    <AuthUserContext.Consumer>
+        {authUser => (
+          <div>
+            <h1>UID: {authUser.uid}</h1>
+          </div>
+        )}
+         </AuthUserContext.Consumer>
+  
+  </div>
+);
+
+// const HomePage = () => {
+//   return(
+//     <div id = "homepage">
+//      <div>I am studying <DropdownButton id="dropdown-basic-button" title="Course">
+//   <Dropdown.Item >Math</Dropdown.Item>
+//   <Dropdown.Item >Physics</Dropdown.Item>
+//   <Dropdown.Item>Chemistry</Dropdown.Item>
+//   <Dropdown.Item>English</Dropdown.Item>
+//   <Dropdown.Item>CS</Dropdown.Item>
+// </DropdownButton></div>
+
+
+// <br />
+// <br />
+// {/* <CallPage /> */}
+//     </div>
+//   )
+// };
+
+class HomePageFormBase extends Component{
+  constructor(props) {
+    super(props);
+    this.state = { ...INITIAL_STATE };
   }
-}
+ 
+  onSubmit = event => {
+    const { username, course } = this.state;
 
-export const initializeSession = () => {
-
-    session = OT.initSession(apiKey, sessionId);
-    // create a publisher
-    publisher = OT.initPublisher(
-       "publisher",
-       {
-          insertMode: "append",  
-          width: "100%",
-          height: "100%"
-       },
-       handleError
-    );
-    // subscribe to newly created stream
-
-
- // connect to the session
- session.connect(token, function (error) {
-   // If the connection is successful, publish to the session
-   if (error) {
-       handleError(error);
-   } else {
-       session.publish(publisher, handleError);
-   }
- });
-
- session.on("streamCreated", function (event) {
-    session.subscribe(
-      event.stream,
-      "subscriber",
+    this.props.firebase.
+    createQueue (username, course)
+    .then(authUser =>
       {
-         insertMode: "append",
-         width: "100%",
-         height: "100%",
-      },
-      handleError
- );
-});
+        return 
+        this.props.firebase
+    //     .database().ref('Matches/' + authUser.user.uid)
+    //     .user(authUser.user.uid)
+    //     .set({
+    //   username,
+    //  course,
+    // })
+    .user(authUser.user.uid)
+          .set({
+            username,
+            course,
+          });
+        // );
+    // )}
+    // </AuthUserContext.Consumer>
+  })
 
- // do some action upon destroying the created stream
- session.on("streamDestroyed", function (event) {
-   console.log("Stream Destroyed!");
- });
+    // this.props.firebase
+    //   .doCreateUserWithEmailAndPassword(username, course )
+    //   .then(authUser => {
+    //     // Create a user in your Firebase realtime database
+        // return this.props.firebase
+        //   .user(authUser.user.uid)
+        //   .set({
+        //     username,
+        //     course,
+        //   });
+      // })
+      .then(() => {
+        this.setState({ ...INITIAL_STATE });
+        this.props.history.push(ROUTES.CALL);
+      })
+      .catch(error => {
+        this.setState({ error });
+      });
+ 
+    event.preventDefault();
+  };
+ 
+  onChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
+ 
+  render() {
+    const {
+      username,
+      course,
+      error,
+    } = this.state;
 
- session.on("sessionDisconnected", (event) =>{
-    console.log("You have been disconnected!");
-    if (event.reason === "networkDisconnected"){
-      alert("Your network was disconnected");
-    }
- })
-
-}
-
-const endCall = () => {
-  session.disconnect();
-}
-
-const HomePage = () => {
-  return(
-    <div id = "homepage">
-     <div>I am studying <DropdownButton id="dropdown-basic-button" title="Course">
+    return (
+  
+  <form onSubmit={this.onSubmit}>
+           <div>I am studying <DropdownButton id="dropdown-basic-button" title="Course">
   <Dropdown.Item >Math</Dropdown.Item>
   <Dropdown.Item >Physics</Dropdown.Item>
   <Dropdown.Item>Chemistry</Dropdown.Item>
   <Dropdown.Item>English</Dropdown.Item>
   <Dropdown.Item>CS</Dropdown.Item>
 </DropdownButton></div>
-<br />
-<br />
-
-      <button className = "" onClick = {() => initializeSession()}>Join call!</button>
-      <button onClick = {() => endCall()}>End call!</button>
+        <input
+          name="course"
+          value={course}
+          onChange={this.onChange}
+          type="text"
+          placeholder="Preferred Course"
+        />
+        <button type="submit">Submit request!</button>
+        {error && <p>{error.message}</p>}
+      </form>
      
-      <div id = "videos">
-        <div id="publisher"></div>
-        <div id="subscriber"></div>
-    </div>
-    </div>
-  )
-};
+    );
+  }
+}
+
+const HomePageForm = compose(
+  withRouter,
+  withFirebase,
+)(HomePageFormBase);
 
 const condition = authUser => !!authUser;
  
