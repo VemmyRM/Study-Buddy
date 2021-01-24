@@ -18,9 +18,12 @@ function handleError(error) {
 }
 
 // var SERVER_BASE_URL = 'http://localhost:3000';
-// fetch(SERVER_BASE_URL + '/session').then(function(res) {
-//   return res.json()
-// }).then(function(res) {
+// fetch(SERVER_BASE_URL + '/session')
+// .then(function(res) {
+//   return JSON.parse(res)
+// })
+// .then(function(res) {
+//   console.log(res)
 //   apiKey = res.apiKey;
 //   sessionId = res.sessionId;
 //   token = res.token;
@@ -69,6 +72,7 @@ export const initializeSession = () => {
  // do some action upon destroying the created stream
  session.on("streamDestroyed", function (event) {
    console.log("Stream Destroyed!");
+   console.log(session);
  });
 
  session.on("sessionDisconnected", (event) =>{
