@@ -1,7 +1,7 @@
 import React from 'react';
-//import "./index.css";
+ 
+import { withAuthorization } from '../Session';
 const OT = require('@opentok/client');
-
 
 var apiKey = '45828062';
 var sessionId = '1_MX40NTgyODA2Mn5-MTYxMTQyNjY4NDAyMH5BbjVtTHVVbjVJSGQ5MWN1ZGJ3YU5DL2l-UH4';
@@ -63,7 +63,7 @@ const endCall = () => {
 
 }
 
-const Home = () => {
+const HomePage = () => {
   return(
     <div id = "homepage">
       <button className = "" onClick = {() => initializeSession()}>Join call!</button>
@@ -76,6 +76,6 @@ const Home = () => {
   )
 };
 
-
+const condition = authUser => !!authUser;
  
-export default Home;
+export default withAuthorization(condition)(HomePage);
