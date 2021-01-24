@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Navbar,Nav } from 'react-bootstrap'
 
 import { AuthUserContext } from '../Session';
 import SignOutButton from '../SignOut';
@@ -18,26 +19,22 @@ const Navigation = () => (
   </AuthUserContext.Consumer>
 );
 
+
+
+
+
 const NavigationAuth = ({ authUser }) => (
-  <ul>
-    <li>
-      <Link to={ROUTES.LANDING}>Landing</Link>
-    </li>
-    <li>
-      <Link to={ROUTES.HOME}>Home</Link>
-    </li>
-    <li>
-      <Link to={ROUTES.ACCOUNT}>Account</Link>
-    </li>
-    {/* {!!authUser.roles[ROLES.ADMIN] && (
-      <li>
-        <Link to={ROUTES.ADMIN}>Admin</Link>
-      </li>
-    )} */}
-    <li>
+  <Navbar bg="dark" variant="dark">
+    <Navbar.Brand href="#home">LOGO/COMPANY</Navbar.Brand>    
+    <Nav className="mr-auto"> 
+      <Nav.Link href = {ROUTES.LANDING}>Landing</Nav.Link>
+      <Nav.Link href ={ROUTES.HOME}>Home</Nav.Link>
+    </Nav>
+    <Nav>
+      <Nav.Link href ={ROUTES.ACCOUNT}>Account</Nav.Link> 
       <SignOutButton />
-    </li>
-  </ul>
+    </Nav>
+  </Navbar>
 );
 
 const NavigationNonAuth = () => (
