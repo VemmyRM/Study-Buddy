@@ -17,6 +17,23 @@ function handleError(error) {
   }
 }
 
+const joinCall = () => {
+  var SERVER_BASE_URL = 'http://localhost:3000';
+  fetch(SERVER_BASE_URL + '/session').then(function(res) {
+    return res.json()
+  }) 
+  .then(function(res) {
+    apiKey = res.apiKey;
+    sessionId = res.sessionId;
+    token = res.token;
+    initializeSession();
+  })
+  .catch(handleError);
+
+  initializeSession();
+}
+
+
 export const initializeSession = () => {
 
     session = OT.initSession(apiKey, sessionId);
@@ -59,6 +76,7 @@ export const initializeSession = () => {
  // do some action upon destroying the created stream
  session.on("streamDestroyed", function (event) {
    console.log("Stream Destroyed!");
+   console.log(session);
  });
 
  session.on("sessionDisconnected", (event) =>{
@@ -87,7 +105,7 @@ const HomePage = () => {
 <br />
 <br />
 
-      <button className = "" onClick = {() => initializeSession()}>Join call!</button>
+      <button className = "" onClick = {() => joinCall()}>Join call!</button>
       <button onClick = {() => endCall()}>End call!</button>
      
       <div id = "videos">
