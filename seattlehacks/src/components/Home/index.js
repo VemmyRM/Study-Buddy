@@ -76,6 +76,7 @@ export const initializeSession = () => {
  // do some action upon destroying the created stream
  session.on("streamDestroyed", function (event) {
    console.log("Stream Destroyed!");
+   console.log(session);
  });
 
  session.on("sessionDisconnected", (event) =>{
