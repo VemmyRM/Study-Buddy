@@ -3,6 +3,9 @@ import './index.css';
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import { withAuthorization } from '../Session';
+import axios from 'axios';
+
+
 const OT = require('@opentok/client');
 
 var apiKey = '45828062';
@@ -17,20 +20,30 @@ function handleError(error) {
   }
 }
 
-
 const joinCall = () => {
   var SERVER_BASE_URL = 'https://studybuddytech.herokuapp.com';
-  fetch(SERVER_BASE_URL + '/session', {mode: 'no-cors'})
-  .then(function(res) {
+
+
+  fetch(SERVER_BASE_URL + '/session').then(function(res) {
     return res.json()
-  }) 
-  .then(function(res) {
+  }).then(function(res) {
     apiKey = res.apiKey;
     sessionId = res.sessionId;
     token = res.token;
     initializeSession();
-  })
-  .catch(handleError);
+  }).catch(handleError);
+
+
+  // fetch(SERVER_BASE_URL + '/session').then(function(res) {
+  //   return res.json()
+  // }) 
+  // .then(function(res) {
+  //   apiKey = res.apiKey;
+  //   sessionId = res.sessionId;
+  //   token = res.token;
+  //   initializeSession();
+  // })
+  // .catch(handleError);
 }
 
 
@@ -73,6 +86,8 @@ export const initializeSession = () => {
  );
 });
 
+console.log(session);
+
  // do some action upon destroying the created stream
  session.on("streamDestroyed", function (event) {
    console.log("Stream Destroyed!");
@@ -85,8 +100,6 @@ export const initializeSession = () => {
       alert("Your network was disconnected");
     }
  })
-
- console.log(session);
 
 }
 
