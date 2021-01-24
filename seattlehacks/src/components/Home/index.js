@@ -17,15 +17,22 @@ function handleError(error) {
   }
 }
 
-// var SERVER_BASE_URL = 'http://localhost:3000';
-// fetch(SERVER_BASE_URL + '/session').then(function(res) {
-//   return res.json()
-// }).then(function(res) {
-//   apiKey = res.apiKey;
-//   sessionId = res.sessionId;
-//   token = res.token;
-//   initializeSession();
-// }).catch(handleError);
+const joinCall = () => {
+  var SERVER_BASE_URL = 'http://localhost:3000';
+  fetch(SERVER_BASE_URL + '/session').then(function(res) {
+    return res.json()
+  }) 
+  .then(function(res) {
+    apiKey = res.apiKey;
+    sessionId = res.sessionId;
+    token = res.token;
+    initializeSession();
+  })
+  .catch(handleError);
+
+  initializeSession();
+}
+
 
 export const initializeSession = () => {
 
@@ -97,7 +104,7 @@ const HomePage = () => {
 <br />
 <br />
 
-      <button className = "" onClick = {() => initializeSession()}>Join call!</button>
+      <button className = "" onClick = {() => joinCall()}>Join call!</button>
       <button onClick = {() => endCall()}>End call!</button>
      
       <div id = "videos">
