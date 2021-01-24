@@ -16,30 +16,20 @@ function handleError(error) {
 }
 
 export const initializeSession = () => {
- session = OT.initSession(apiKey, sessionId);
- // create a publisher
- publisher = OT.initPublisher(
-    "publisher",
-    {
-       insertMode: "append",  
-       width: "100%",
-       height: "100%"
-    },
-    handleError
- );
- // subscribe to newly created stream
- session.on("streamCreated", function (event) {
-     subscriber = session.subscribe(
-         event.stream,
-         "subscriber",
-         {
-            insertMode: "append",
-            width: "100%",
-            height: "100%",
-         },
-         handleError
+
+    session = OT.initSession(apiKey, sessionId);
+    // create a publisher
+    publisher = OT.initPublisher(
+       "publisher",
+       {
+          insertMode: "append",  
+          width: "100%",
+          height: "100%"
+       },
+       handleError
     );
- });
+    // subscribe to newly created stream
+
 
  // connect to the session
  session.connect(token, function (error) {
@@ -50,17 +40,36 @@ export const initializeSession = () => {
        session.publish(publisher, handleError);
    }
  });
+
+ session.on("streamCreated", function (event) {
+    session.subscribe(
+      event.stream,
+      "subscriber",
+      {
+         insertMode: "append",
+         width: "100%",
+         height: "100%",
+      },
+      handleError
+ );
+});
+
  // do some action upon destroying the created stream
  session.on("streamDestroyed", function (event) {
-   console.log(event);
-     session.unpublish(publisher);
+   console.log("Stream Destroyed!");
  });
+
+ session.on("sessionDisconnected", (event) =>{
+    console.log("You have been disconnected!");
+    if (event.reason === "networkDisconnected"){
+      alert("Your network was disconnected");
+    }
+ })
 
 }
 
 const endCall = () => {
-  session.unpublish(publisher);
-
+  session.disconnect();
 }
 
 const HomePage = () => {
