@@ -20,19 +20,19 @@ function handleError(error) {
   }
 }
 
-
 const joinCall = () => {
   var SERVER_BASE_URL = 'https://studybuddytech.herokuapp.com';
-  axios.get(SERVER_BASE_URL + '/session').then(function(res) {
+
+
+  fetch(SERVER_BASE_URL + '/session').then(function(res) {
     return res.json()
-  })
-  .then(function(res) {
+  }).then(function(res) {
     apiKey = res.apiKey;
     sessionId = res.sessionId;
     token = res.token;
     initializeSession();
-  })
-  .catch(handleError)
+  }).catch(handleError);
+
 
   // fetch(SERVER_BASE_URL + '/session').then(function(res) {
   //   return res.json()
@@ -85,6 +85,8 @@ export const initializeSession = () => {
  );
 });
 
+console.log(session);
+
  // do some action upon destroying the created stream
  session.on("streamDestroyed", function (event) {
    console.log("Stream Destroyed!");
@@ -97,8 +99,6 @@ export const initializeSession = () => {
       alert("Your network was disconnected");
     }
  })
-
- console.log(session);
 
 }
 
