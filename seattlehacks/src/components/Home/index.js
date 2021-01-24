@@ -15,6 +15,16 @@ function handleError(error) {
   }
 }
 
+// var SERVER_BASE_URL = 'http://localhost:3000';
+// fetch(SERVER_BASE_URL + '/session').then(function(res) {
+//   return res.json()
+// }).then(function(res) {
+//   apiKey = res.apiKey;
+//   sessionId = res.sessionId;
+//   token = res.token;
+//   initializeSession();
+// }).catch(handleError);
+
 export const initializeSession = () => {
 
     session = OT.initSession(apiKey, sessionId);
