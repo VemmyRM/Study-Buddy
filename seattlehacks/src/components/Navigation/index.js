@@ -21,8 +21,10 @@ const Navigation = () => (
 
 
 const NavigationAuth = ({ authUser }) => (
+  <div>
   <Navbar bg="dark" variant="dark">
-    <Navbar.Brand href="#home">LOGO/COMPANY</Navbar.Brand>    
+  <Nav.Link href="#home">Study Buddy</Nav.Link>  
+    <Nav.Link href="#home"></Nav.Link>    
     <Nav className="mr-auto"> 
       {/* <Nav.Link href = {ROUTES.LANDING}>Landing</Nav.Link> */}
       <Nav.Link href ={ROUTES.HOME}>Home</Nav.Link>
@@ -32,17 +34,24 @@ const NavigationAuth = ({ authUser }) => (
       <SignOutButton />
     </Nav>
   </Navbar>
+  
+  </div>
 );
 
 const NavigationNonAuth = () => (
-  <ul>
-    <li>
-      <Link to={ROUTES.LANDING}>Landing</Link>
-    </li>
-    <li>
-      <Link to={ROUTES.SIGN_IN}>Sign In</Link>
-    </li>
-  </ul>
+
+
+  <Navbar bg="dark" variant="dark">
+    <Navbar.Brand href="#home">LOGO/COMPANY</Navbar.Brand>    
+    <Nav className="mr-auto"> 
+      {/* <Nav.Link href = {ROUTES.LANDING}>Landing</Nav.Link> */}
+
+    </Nav>
+    <Nav>
+      <Nav.Link href ={ROUTES.SIGN_IN}>Sign In</Nav.Link>
+      <Nav.Link href ={ROUTES.SIGN_UP}>Sign Up!</Nav.Link> 
+    </Nav>
+  </Navbar>
 );
 
 export default Navigation;
