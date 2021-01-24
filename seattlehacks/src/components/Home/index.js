@@ -3,6 +3,9 @@ import './index.css';
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import { withAuthorization } from '../Session';
+import axios from 'axios';
+
+
 const OT = require('@opentok/client');
 
 var apiKey = '45828062';
@@ -18,19 +21,29 @@ function handleError(error) {
 }
 
 const joinCall = () => {
-  var SERVER_BASE_URL = 'http://localhost:3000';
-  fetch(SERVER_BASE_URL + '/session').then(function(res) {
+  var SERVER_BASE_URL = 'https://studybuddytech.herokuapp.com';
+
+  axios.get(SERVER_BASE_URL + '/session').then(function(res) {
     return res.json()
-  }) 
+  })
   .then(function(res) {
     apiKey = res.apiKey;
     sessionId = res.sessionId;
     token = res.token;
     initializeSession();
   })
-  .catch(handleError);
+  .catch(handleError)
 
-  initializeSession();
+  // fetch(SERVER_BASE_URL + '/session').then(function(res) {
+  //   return res.json()
+  // }) 
+  // .then(function(res) {
+  //   apiKey = res.apiKey;
+  //   sessionId = res.sessionId;
+  //   token = res.token;
+  //   initializeSession();
+  // })
+  // .catch(handleError);
 }
 
 

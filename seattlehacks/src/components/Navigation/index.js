@@ -20,9 +20,6 @@ const Navigation = () => (
 );
 
 
-
-
-
 const NavigationAuth = ({ authUser }) => (
   <Navbar bg="dark" variant="dark">
     <Navbar.Brand href="#home">LOGO/COMPANY</Navbar.Brand>    
