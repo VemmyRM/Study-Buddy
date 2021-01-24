@@ -1,5 +1,7 @@
 import React from 'react';
- 
+import './index.css';
+import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownButton from 'react-bootstrap/DropdownButton'
 import { withAuthorization } from '../Session';
 const OT = require('@opentok/client');
 
@@ -85,8 +87,19 @@ const endCall = () => {
 const HomePage = () => {
   return(
     <div id = "homepage">
+     <div>I am studying <DropdownButton id="dropdown-basic-button" title="Course">
+  <Dropdown.Item >Math</Dropdown.Item>
+  <Dropdown.Item >Physics</Dropdown.Item>
+  <Dropdown.Item>Chemistry</Dropdown.Item>
+  <Dropdown.Item>English</Dropdown.Item>
+  <Dropdown.Item>CS</Dropdown.Item>
+</DropdownButton></div>
+<br />
+<br />
+
       <button className = "" onClick = {() => initializeSession()}>Join call!</button>
       <button onClick = {() => endCall()}>End call!</button>
+     
       <div id = "videos">
         <div id="publisher"></div>
         <div id="subscriber"></div>

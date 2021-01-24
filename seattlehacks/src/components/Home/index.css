@@ -32,3 +32,9 @@ html {
   border: 3px solid white;
   border-radius: 3px;
 }
+
+#btnLeft:focus {
+  width: 70px;
+  height: 74px;
+  background: black;
+}
