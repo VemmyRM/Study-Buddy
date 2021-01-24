@@ -10,19 +10,19 @@ var token = 'T1==cGFydG5lcl9pZD00NTgyODA2MiZzaWc9ZTNiOTgzNzkzM2EzYWVmMTQxNmQyZjR
 
 let session, publisher, subscriber;
 
-
 const joinCall = () => {
   var SERVER_BASE_URL = 'https://studybuddytech.herokuapp.com';
-  axios.get(SERVER_BASE_URL + '/session').then(function(res) {
+
+
+  fetch(SERVER_BASE_URL + '/room/start').then(function(res) {
     return res.json()
-  })
-  .then(function(res) {
+  }).then(function(res) {
     apiKey = res.apiKey;
     sessionId = res.sessionId;
     token = res.token;
     initializeSession();
-  })
-  .catch(handleError)
+  }).catch(handleError);
+
 
   // fetch(SERVER_BASE_URL + '/session').then(function(res) {
   //   return res.json()
@@ -118,5 +118,6 @@ function handleError(error) {
   
 
 const condition = authUser => !!authUser;
+
 
 export default withAuthorization(condition)(CallPage);

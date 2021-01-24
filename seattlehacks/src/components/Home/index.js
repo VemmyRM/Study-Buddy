@@ -4,7 +4,8 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import { withAuthorization } from '../Session';
 import axios from 'axios';
-
+import {Container, Button, FormControl, Form} from "react-bootstrap";
+import * as ROUTES from '../../constants/routes';
 
 const OT = require('@opentok/client');
 
@@ -108,25 +109,27 @@ const endCall = () => {
 
 const HomePage = () => {
   return(
-    <div id = "homepage">
-     <div>I am studying <DropdownButton id="dropdown-basic-button" title="Course">
-  <Dropdown.Item >Math</Dropdown.Item>
-  <Dropdown.Item >Physics</Dropdown.Item>
-  <Dropdown.Item>Chemistry</Dropdown.Item>
-  <Dropdown.Item>English</Dropdown.Item>
-  <Dropdown.Item>CS</Dropdown.Item>
-</DropdownButton></div>
-<br />
-<br />
-
-      <button className = "" onClick = {() => joinCall()}>Join call!</button>
-      <button onClick = {() => endCall()}>End call!</button>
-     
-      <div id = "videos">
-        <div id="publisher"></div>
-        <div id="subscriber"></div>
-    </div>
-    </div>
+    <Container id = "landingTron">
+      <h1 className= "homeText"> Welcome to Study Buddy! </h1>
+      <br></br>
+      <p className = "homeWords">Tell us what you're studying, and we'll match you with a study buddy working on the same thing!</p>
+      <br></br>
+       <h3 className = "studying">I'm studying...</h3>
+       <br></br>
+       <br></br>
+       <Form>
+       <Form.Group>
+         <Form.Control as="select" size = "lg">
+           <option>Math</option>
+           <option>Physics</option>
+           <option>Chemistry</option>
+           <option>English</option>
+           <option>CS</option>
+         </Form.Control>
+       </Form.Group>
+       <Button  href ={ROUTES.CALL} variant = "outline-light" type = "submit">Find my Study Buddy! </Button>
+       </Form>
+    </Container>
   )
 };
 
