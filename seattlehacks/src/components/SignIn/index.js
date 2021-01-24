@@ -6,14 +6,17 @@ import { SignUpLink } from '../SignUp';
 import { PasswordForgetLink } from '../PasswordForget';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
+import { Form, Container, Button} from 'react-bootstrap';
+
  
 const SignInPage = () => (
-  <div>
-    <h1>SignIn</h1>
+  <Container>
+    <h1>Sign In</h1>
+    <br></br>
     <SignInForm />
     <PasswordForgetLink />
     <SignUpLink />
-  </div>
+  </Container>
 );
  
 const INITIAL_STATE = {
@@ -55,27 +58,32 @@ class SignInFormBase extends Component {
     const isInvalid = password === '' || email === '';
  
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          name="email"
+
+        <Form onSubmit={this.onSubmit}>
+        <Form.Group controlID="formBasicEmail">
+          <Form.Label>Email address</Form.Label>
+          <Form.Control name="email"
           value={email}
           onChange={this.onChange}
           type="text"
-          placeholder="Email Address"
-        />
-        <input
-          name="password"
+          placeholder="Email Address" />
+        </Form.Group>
+        
+        <Form.Group controlId = "formBasicPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control  name="password"
           value={password}
           onChange={this.onChange}
           type="password"
-          placeholder="Password"
-        />
-        <button disabled={isInvalid} type="submit">
+          placeholder="Password" />
+        </Form.Group>
+        <Button variant="primary" type="submit">
           Sign In
-        </button>
+        </Button>
  
         {error && <p>{error.message}</p>}
-      </form>
+      </Form>
+      
     );
   }
 }

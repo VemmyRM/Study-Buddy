@@ -24,7 +24,7 @@ const NavigationAuth = ({ authUser }) => (
   <Navbar bg="dark" variant="dark">
     <Navbar.Brand href="#home">LOGO/COMPANY</Navbar.Brand>    
     <Nav className="mr-auto"> 
-      <Nav.Link href = {ROUTES.LANDING}>Landing</Nav.Link>
+      {/* <Nav.Link href = {ROUTES.LANDING}>Landing</Nav.Link> */}
       <Nav.Link href ={ROUTES.HOME}>Home</Nav.Link>
     </Nav>
     <Nav>

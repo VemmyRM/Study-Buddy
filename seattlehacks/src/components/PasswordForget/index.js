@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom';
  
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
+import { Container, Form, Button } from 'react-bootstrap';
  
 const PasswordForgetPage = () => (
-  <div>
+  <Container>
     <h1>PasswordForget</h1>
     <PasswordForgetForm />
-  </div>
+  </Container>
 );
  
 const INITIAL_STATE = {
@@ -48,28 +49,33 @@ class PasswordForgetFormBase extends Component {
     const isInvalid = email === '';
  
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          name="email"
+      <Form onSubmit={this.onSubmit}>
+        <Form.Group controlId="formBasicEmail">
+          <Form.Label>Email address</Form.Label>
+          <Form.Control  name="email"
           value={this.state.email}
           onChange={this.onChange}
           type="text"
-          placeholder="Email Address"
-        />
-        <button disabled={isInvalid} type="submit">
+          placeholder="Email Address" />
+        </Form.Group>
+        <Button variant = "primary" disabled={isInvalid} type="submit">
           Reset My Password
-        </button>
+        </Button>
  
         {error && <p>{error.message}</p>}
-      </form>
+      </Form>
     );
   }
 }
  
 const PasswordForgetLink = () => (
-  <p>
-    <Link to={ROUTES.PASSWORD_FORGET}>Forgot Password?</Link>
-  </p>
+  <div>
+    <p>
+    Forgot your password?
+    <Link className = "link" to={ROUTES.PASSWORD_FORGET}>Click here</Link>
+    </p>
+  </div>
+
 );
  
 export default PasswordForgetPage;
