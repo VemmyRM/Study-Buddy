@@ -17,9 +17,11 @@ function handleError(error) {
   }
 }
 
+
 const joinCall = () => {
-  var SERVER_BASE_URL = 'http://localhost:3000';
-  fetch(SERVER_BASE_URL + '/session').then(function(res) {
+  var SERVER_BASE_URL = 'https://studybuddytech.herokuapp.com';
+  fetch(SERVER_BASE_URL + '/session', {mode: 'no-cors'})
+  .then(function(res) {
     return res.json()
   }) 
   .then(function(res) {
@@ -29,8 +31,6 @@ const joinCall = () => {
     initializeSession();
   })
   .catch(handleError);
-
-  initializeSession();
 }
 
 
@@ -85,6 +85,8 @@ export const initializeSession = () => {
       alert("Your network was disconnected");
     }
  })
+
+ console.log(session);
 
 }
 
